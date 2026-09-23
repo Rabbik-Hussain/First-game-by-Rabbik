@@ -369,9 +369,10 @@ function checkSudokuSolution() {
 }
 
 // ==========================================
-// BONUS GAME: Magic Square (Strict Rule Implementation)
+// BONUS GAME: Magic Square (With Back/Forward Level Navigation)
 // ==========================================
 let g6Size = 3;
+let g6MaxUnlockedSize = 3; // সর্বোচ্চ কত সাইজ পর্যন্ত আনলক হয়েছে তা ট্র্যাক করার জন্য
 
 function generateMagicSquare() {
     const board = document.getElementById('magic-board'); 
@@ -392,6 +393,34 @@ function generateMagicSquare() {
         input.className = 'm-cell';
         board.appendChild(input);
     }
+    
+    updateMagicSquareNavigationUI();
+}
+
+// পূর্বের লেভেলে ফিরে যাওয়ার বা আনলক লেভেল সিলেক্ট করার ফাংশন
+function changeMagicSize(newSize) {
+    if (newSize >= 3 && newSize <= 9) {
+        // যদি ব্যবহারকারী এমন কোনো সাইজে যেতে চায় যা সে ইতিমধ্যে আনলক করেনি
+        if (newSize > g6MaxUnlockedSize) {
+            const msgElem = document.getElementById('g6-msg');
+            if (msgElem) msgElem.innerText = `আগে বর্তমান লেভেল (${toBanglaNum(g6MaxUnlockedSize)}×${toBanglaNum(g6MaxUnlockedSize)}) সলভ করুন!`;
+            playSound('fail');
+            return;
+        }
+        playSound('click');
+        g6Size = newSize;
+        generateMagicSquare();
+        const msgElem = document.getElementById('g6-msg');
+        if (msgElem) msgElem.innerText = `${toBanglaNum(g6Size)}×${toBanglaNum(g6Size)} ম্যাজিক স্কয়ারে স্বাগতম!`;
+    }
+}
+
+// লেভেল নেভিগেশন বাটন বা ড্রপডাউন থাকলে তা আপডেট করার হ্যান্ডলার
+function updateMagicSquareNavigationUI() {
+    const prevBtn = document.getElementById('g6-prev-btn');
+    const nextBtn = document.getElementById('g6-next-btn');
+    if (prevBtn) prevBtn.disabled = (g6Size <= 3);
+    if (nextBtn) nextBtn.disabled = (g6Size >= g6MaxUnlockedSize);
 }
 
 function checkMagicSquare() {
@@ -469,9 +498,13 @@ function checkMagicSquare() {
     triggerConfetti(); 
     updateGlobalScore(30);
     
-    // ৩×৩ থেকে শুরু হয়ে ৯×৯ পর্যন্ত যাবে, এরপর আবার ৩×৩ এ ফিরে আসবে
-    if (g6Size < 9) g6Size++; 
-    else g6Size = 3;
+    // ৩×৩ থেকে শুরু হয়ে ৯×৯ পর্যন্ত যাবে
+    if (g6Size < 9) {
+        g6Size++;
+        if (g6Size > g6MaxUnlockedSize) {
+            g6MaxUnlockedSize = g6Size;
+        }
+    } 
     
     saveGameState('6', g6Size, totalScore);
     generateMagicSquare();
@@ -722,7 +755,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if (stateG4.level) g4Lvl = stateG4.level;
 
     const stateG6 = loadGameState('6');
-    if (stateG6.level) g6Size = stateG6.level;
+    if (stateG6.level) {
+        g6Size = stateG6.level;
+        g6MaxUnlockedSize = stateG6.level;
+    }
 
     const stateG7 = loadGameState('7');
     if (stateG7.level) g7Lvl = stateG7.level;
@@ -743,11 +779,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const stateG11 = loadGameState('11');
     if (stateG11.level) g11GridSize = stateG11.level;
 
-    totalScore = Math.max(
-        stateG1.score || 0, stateG2.score || 0, stateG3.score || 0,
-        stateG4.score || 0, stateG6.score || 0, stateG7.score || 0,
-        stateG8.score || 0, stateG9.score || 0, stateG10.score || 0, stateG11.score || 0
-    );
+    // টোটাল স্কোর সঠিকভাবে সব গেমের স্কোর যোগ করে বের করা
+    totalScore = (stateG1.score || 0) + (stateG2.score || 0) + (stateG3.score || 0) +
+                 (stateG4.score || 0) + (stateG6.score || 0) + (stateG7.score || 0) +
+                 (stateG8.score || 0) + (stateG9.score || 0) + (stateG10.score || 0) + (stateG11.score || 0);
     updateGlobalScore(0);
 
     const lastActiveGame = localStorage.getItem('active_game_id') || 'game_1';
