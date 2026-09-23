@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>১১টি ব্রেইন রিফ্রেশিং গেমস হাব</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Poppins:wght@400;600;700&family=Monoton&family=Press+Start+2P&family=Pacifico&family=Orbitron:wght@700&family=Russo+One&family=Bungee&family=Righteous&family=Fascinate&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Developer Credit Banner -->
+        <div class="dev-banner">
+            <h1 id="dev-title" class="style-theme-0">The game developer is MD. RABBIK HUSSAIN</h1>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <h2><i class="fa-solid fa-gamepad"></i> ব্রেইন রিফ্রেশ গেমস হাব</h2>
+            <div class="score-badge">
+                <i class="fa-solid fa-trophy"></i> মোট স্কোর: <span id="total-score">০</span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs (5 Left + Bonus Center + 5 Right) -->
+        <nav class="game-tabs">
+            <button class="tab-btn active" onclick="switchGame(0)"><i class="fa-solid fa-crosshairs"></i> ১. লেভেল গেসিং</button>
+            <button class="tab-btn" onclick="switchGame(1)"><i class="fa-solid fa-brain"></i> ২. মেমোরি ফ্ল্যাশ</button>
+            <button class="tab-btn" onclick="switchGame(2)"><i class="fa-solid fa-stopwatch"></i> ৩. স্পিড ম্যাথ</button>
+            <button class="tab-btn" onclick="switchGame(3)"><i class="fa-solid fa-puzzle-piece"></i> ৪. প্যাটার্ন পাজল</button>
+            <button class="tab-btn" onclick="switchGame(4)"><i class="fa-solid fa-border-all"></i> ৫. সুডোকু মাস্টার</button>
+            
+            <!-- BONUS GAME (Centered) -->
+            <button class="tab-btn bonus-tab" onclick="switchGame(5)"><i class="fa-solid fa-wand-magic-sparkles"></i> 🎁 বোনাস গেম: ম্যাজিক স্কয়ার</button>
+
+            <button class="tab-btn" onclick="switchGame(6)"><i class="fa-solid fa-calculator"></i> ৬. মিসিং অপারেটর</button>
+            <button class="tab-btn" onclick="switchGame(7)"><i class="fa-solid fa-th"></i> ৭. নাম্বার ম্যাট্রিক্স</button>
+            <button class="tab-btn" onclick="switchGame(8)"><i class="fa-solid fa-arrow-down-1-9"></i> ৮. নম্বর সিকোয়েন্স</button>
+            <button class="tab-btn" onclick="switchGame(9)"><i class="fa-solid fa-bolt"></i> ৯. ম্যাথ রিফ্লেক্স</button>
+            <button class="tab-btn" onclick="switchGame(10)"><i class="fa-solid fa-cubes"></i> ১০. উডেন স্ল্যাইডিং পাজল</button>
+        </nav>
+
+        <!-- Main Games Viewport -->
+        <main class="games-viewport">
+
+            <!-- GAME 1: Progressive Guessing -->
+            <section class="game-card theme-guess active" id="game-0">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-bullseye"></i> ১. লেভেলভিত্তিক সংখ্যা খোঁজা</h2>
+                    <span class="level-tag">লেভেল <span id="g1-level">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">আমি <span id="g1-min">১</span> থেকে <span id="g1-max">১০</span> এর মধ্যে একটি সংখ্যা ভেবেছি।</p>
+                    <div class="proximity-container"><div class="proximity-bar" id="g1-prox-bar"></div></div>
+                    <div class="attempts-left">বাকি চেষ্টা: <span id="g1-attempts">৫</span></div>
+                    <div class="input-group">
+                        <input type="number" id="g1-input" placeholder="সংখ্যা..." autocomplete="off">
+                        <button onclick="guessNumber()"><i class="fa-solid fa-paper-plane"></i> যাচাই</button>
+                    </div>
+                    <div class="message-box" id="g1-msg">গেম শুরু করতে সংখ্যা দিয়ে যাচাই বোতামে চাপুন!</div>
+                    <div class="history-list" id="g1-history"></div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" disabled><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(1)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 2: Memory Flash -->
+            <section class="game-card theme-memory" id="game-1">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-brain"></i> ২. সংখ্যা স্মৃতিশক্তি পরীক্ষা</h2>
+                    <span class="level-tag">ধাপ <span id="g2-stage">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">সংখ্যাটি মনে রাখুন, সময় শেষ হলে টাইপ করুন!</p>
+                    <div class="memory-display" id="g2-display"><span id="g2-num-text">?</span></div>
+                    <div class="input-group" id="g2-input-group" style="display: none;">
+                        <input type="number" id="g2-input" placeholder="মনে রাখা সংখ্যাটি লিখুন..." autocomplete="off">
+                        <button onclick="checkMemory()"><i class="fa-solid fa-check"></i> জমা দিন</button>
+                    </div>
+                    <button class="btn-start" id="g2-start-btn" onclick="startMemoryRound()"><i class="fa-solid fa-play"></i> রাউন্ড শুরু করুন</button>
+                    <div class="message-box" id="g2-msg">প্রস্তুত হলে 'রাউন্ড শুরু করুন' চাপুন।</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(0)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(2)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 3: Speed Math -->
+            <section class="game-card theme-speed" id="game-2">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-bolt"></i> ৩. স্পিড ম্যাথ মাস্টার</h2>
+                    <div class="timer-badge"><i class="fa-solid fa-clock"></i> <span id="g3-timer">৩০</span> সেঃ</div>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">যত দ্রুত সম্ভব সঠিক উত্তর দিন!</p>
+                    <div class="math-problem" id="g3-problem">? + ? = ?</div>
+                    <div class="options-grid" id="g3-options">
+                        <button class="opt-btn">-</button><button class="opt-btn">-</button>
+                        <button class="opt-btn">-</button><button class="opt-btn">-</button>
+                    </div>
+                    <button class="btn-start" id="g3-start-btn" onclick="startSpeedMath()"><i class="fa-solid fa-play"></i> গেম শুরু করুন</button>
+                    <div class="message-box" id="g3-msg">৩০ সেকেন্ডে দ্রুত উত্তর দিন!</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(1)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(3)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 4: Pattern Puzzle -->
+            <section class="game-card theme-pattern" id="game-3">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-puzzle-piece"></i> ৪. বেমানান সংখ্যা চিহ্নিতকরণ</h2>
+                    <span class="level-tag">লেভেল: <span id="g4-level">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">কোন সংখ্যাটি প্যাটার্নের সাথে মেলে না?</p>
+                    <div class="pattern-grid" id="g4-grid"></div>
+                    <div class="message-box" id="g4-msg">সঠিক বেমানান সংখ্যাটিতে ক্লিক করুন!</div>
+                    <button class="btn-start" onclick="generatePatternGame()"><i class="fa-solid fa-rotate"></i> নতুন প্যাটার্ন</button>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(2)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(4)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 5: Sudoku Master -->
+            <section class="game-card theme-sudoku" id="game-4">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-border-all"></i> ৫. ইনফিনিটি সুডোকু মাস্টার</h2>
+                    <span class="level-tag" id="sudoku-level-display">সহজ</span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">খালি ঘর পূরণ করে পুরো ৯×৯ গ্রিড মেলাও!</p>
+                    <div class="sudoku-container"><div class="sudoku-board" id="sudoku-board"></div></div>
+                    <div class="sudoku-pad" id="sudoku-pad">
+                        <button class="pad-btn" onclick="inputSudokuNumber(1)">১</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(2)">২</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(3)">৩</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(4)">৪</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(5)">৫</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(6)">৬</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(7)">৭</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(8)">৮</button>
+                        <button class="pad-btn" onclick="inputSudokuNumber(9)">৯</button>
+                        <button class="pad-btn action" onclick="inputSudokuNumber(0)"><i class="fa-solid fa-eraser"></i></button>
+                    </div>
+                    <div class="message-box" id="sudoku-msg">ঘর সিলেক্ট করে নিচে নম্বর চাপুন।</div>
+                    <button class="btn-start" onclick="checkSudokuSolution()"><i class="fa-solid fa-circle-check"></i> যাচাই করুন</button>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(3)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav bonus-btn" onclick="switchGame(5)">বোনাস গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- BONUS GAME: Magic Square (Centered) -->
+            <section class="game-card theme-magic" id="game-5">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-wand-magic-sparkles"></i> বোনাস গেম: ম্যাজিক স্কয়ার</h2>
+                    <span class="level-tag">গ্রিড: <span id="g6-size-text">৩×৩</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">সোজা, পাশাপাশি ও কোনাকুনি সবদিকের যোগফল হতে হবে: <b id="g6-magic-sum" style="color:#facc15">১৫</b></p>
+                    <div class="magic-container"><div class="magic-board" id="magic-board"></div></div>
+                    <div class="message-box" id="g6-msg">খালি ঘরে সঠিক সংখ্যা বসিয়ে ম্যাজিক সাম পূরণ করুন!</div>
+                    <button class="btn-start" onclick="checkMagicSquare()"><i class="fa-solid fa-circle-check"></i> যোগফল যাচাই</button>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(4)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(6)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 6: Missing Operator -->
+            <section class="game-card theme-operator" id="game-6">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-calculator"></i> ৬. মিসিং অপারেটর পাজল</h2>
+                    <span class="level-tag">ধাপ: <span id="g7-level">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">প্রশ্নবোধক চিহ্নে সঠিক গাণিতিক চিহ্নটি নির্বাচন করুন!</p>
+                    <div class="math-problem" id="g7-eqn">৫ ? ৩ = ৮</div>
+                    <div class="options-grid">
+                        <button class="opt-btn" onclick="checkOperator('+')">+</button>
+                        <button class="opt-btn" onclick="checkOperator('-')">-</button>
+                        <button class="opt-btn" onclick="checkOperator('×')">×</button>
+                        <button class="opt-btn" onclick="checkOperator('÷')">÷</button>
+                    </div>
+                    <div class="message-box" id="g7-msg">সঠিক চিহ্ন বেছে নিন!</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav bonus-btn" onclick="switchGame(5)"><i class="fa-solid fa-arrow-left"></i> বোনাস গেম</button>
+                    <button class="btn-nav primary" onclick="switchGame(7)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 7: Number Matrix Finder -->
+            <section class="game-card theme-matrix" id="game-7">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-th"></i> ৭. নাম্বার ম্যাট্রিক্স ফাইন্ডার</h2>
+                    <span class="level-tag">লেভেল: <span id="g8-level">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction" id="g8-task">খুঁজে বের করুন: সবচেয়ে বড় জোড় সংখ্যা!</p>
+                    <div class="matrix-grid" id="g8-grid"></div>
+                    <div class="message-box" id="g8-msg">শর্ত অনুযায়ী সঠিক সংখ্যা টিপুন।</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(6)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(8)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 8: Sequence Builder -->
+            <section class="game-card theme-sequence" id="game-8">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-arrow-down-1-9"></i> ৮. নম্বর সিকোয়েন্স মেমোরি</h2>
+                    <span class="level-tag">ধাপ: <span id="g9-level">১</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">ছোট থেকে বড় ক্রমানুসারে সংখ্যাগুলোতে ক্লিক করুন!</p>
+                    <div class="seq-grid" id="g9-grid"></div>
+                    <button class="btn-start" id="g9-start-btn" onclick="startSequenceGame()"><i class="fa-solid fa-play"></i> শুরু করতে চাপুন</button>
+                    <div class="message-box" id="g9-msg">রেডি হলে স্টার্ট বোতামে ক্লিক করুন!</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(7)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(9)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 9: Quick Math Reflex -->
+            <section class="game-card theme-reflex" id="game-9">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-bolt"></i> ৯. কুইক ম্যাথ রিফ্লেক্স</h2>
+                    <span class="level-tag">স্কোর: <span id="g10-score">০</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">নিচের সমীকরণটি কি সত্য নাকি মিথ্যা?</p>
+                    <div class="reflex-card">
+                        <div class="math-problem reflex-problem" id="g10-eqn">৭ + ৩ = ১০</div>
+                    </div>
+                    <div class="options-grid reflex-actions">
+                        <button class="opt-btn reflex-btn true-btn" onclick="checkReflex(true)"><i class="fa-solid fa-circle-check"></i> সত্য</button>
+                        <button class="opt-btn reflex-btn false-btn" onclick="checkReflex(false)"><i class="fa-solid fa-circle-xmark"></i> মিথ্যা</button>
+                    </div>
+                    <div class="message-box reflex-msg" id="g10-msg">দ্রুত সিদ্ধান্ত নিন!</div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(8)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(10)">পরবর্তী গেম <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- GAME 10: Wooden Sliding Number Puzzle -->
+            <section class="game-card theme-wooden" id="game-10">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-cubes"></i> ১০. উডেন স্ল্যাইডিং পাজল</h2>
+                    <span class="level-tag">গ্রিড: <span id="g11-grid-size">২×২</span></span>
+                </div>
+                <div class="game-body">
+                    <p class="instruction">টাইলসগুলো সরিয়ে ১ থেকে পর্যায়ক্রমে সঠিকভাবে সাজান!</p>
+                    <div class="wooden-frame">
+                        <div class="wooden-board" id="wooden-board"></div>
+                    </div>
+                    <div class="message-box" id="g11-msg">খালি ঘরের পাশের সংখ্যায় ক্লিক করে সরান।</div>
+                    <button class="btn-start wooden-btn" onclick="initWoodenPuzzle()"><i class="fa-solid fa-shuffle"></i> নতুন করে সাজান</button>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-nav secondary" onclick="switchGame(9)"><i class="fa-solid fa-arrow-left"></i> পূর্ববর্তী</button>
+                    <button class="btn-nav primary" onclick="switchGame(0)">১ম গেমে ফিরুন <i class="fa-solid fa-rotate-left"></i></button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Confetti Effects -->
+    <canvas id="confetti-canvas"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

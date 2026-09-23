@@ -1,0 +1,474 @@
+/* ==========================================
+   1. GLOBAL RESETS & BASE STYLES
+   ========================================== */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Hind Siliguri', 'Poppins', sans-serif; 
+}
+
+body { 
+    background: #0f172a; 
+    color: #f8fafc; 
+    min-height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 15px 8px; 
+}
+
+/* ==========================================
+   2. KEYFRAME ANIMATIONS
+   ========================================== */
+/* Shake animation for wrong feedback */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(8px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* ==========================================
+   3. APP CONTAINER & HEADER
+   ========================================== */
+.app-container { 
+    width: 100%; 
+    max-width: 680px; 
+    background: #1e293b; 
+    border-radius: 20px; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
+    overflow: hidden; 
+    border: 1px solid rgba(255,255,255,0.1); 
+}
+
+header { 
+    background: #0f172a; 
+    padding: 15px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 1px solid rgba(255,255,255,0.1); 
+}
+
+header h2 { 
+    font-size: 1.1rem; 
+    color: #38bdf8; 
+}
+
+.score-badge { 
+    background: #334155; 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-weight: 600; 
+    color: #facc15; 
+}
+
+/* ==========================================
+   4. DEV CREDIT BANNER & DYNAMIC THEMES
+   ========================================== */
+.dev-banner { 
+    background: #020617; 
+    padding: 15px 10px; 
+    text-align: center; 
+    border-bottom: 2px solid rgba(255,255,255,0.08); 
+}
+
+.dev-banner h1 { 
+    font-size: 1.1rem; 
+    letter-spacing: 1px; 
+    transition: all 0.4s ease; 
+}
+
+/* Dynamic Developer Font/Color Styles */
+.style-theme-0 { font-family: 'Orbitron', sans-serif; color: #a855f7; text-shadow: 0 0 10px #a855f7; }
+.style-theme-1 { font-family: 'Pacifico', cursive; color: #06b6d4; text-shadow: 0 0 10px #06b6d4; }
+.style-theme-2 { font-family: 'Press Start 2P', monospace; font-size: 0.7rem !important; color: #f97316; }
+.style-theme-3 { font-family: 'Monoton', cursive; font-size: 1.2rem !important; color: #10b981; }
+.style-theme-4 { font-family: 'Russo One', sans-serif; color: #f43f5e; text-shadow: 0 0 10px #f43f5e; }
+.style-theme-5 { font-family: 'Bungee', cursive; color: #eab308; text-shadow: 0 0 10px #eab308; }
+.style-theme-6 { font-family: 'Righteous', cursive; color: #3b82f6; text-shadow: 0 0 10px #3b82f6; }
+.style-theme-7 { font-family: 'Fascinate', cursive; color: #ec4899; text-shadow: 0 0 10px #ec4899; }
+.style-theme-8 { font-family: 'Orbitron', sans-serif; color: #84cc16; text-shadow: 0 0 10px #84cc16; }
+.style-theme-9 { font-family: 'Poppins', sans-serif; font-weight: bold; color: #06b6d4; text-shadow: 0 0 12px #06b6d4; }
+.style-theme-10 { font-family: 'Russo One', sans-serif; color: #d97706; text-shadow: 0 0 12px #b45309; }
+
+/* ==========================================
+   5. NAVIGATION & TABS
+   ========================================== */
+.game-tabs { 
+    display: flex; 
+    background: #0f172a; 
+    overflow-x: auto; 
+    padding: 8px; 
+    gap: 6px; 
+    scrollbar-width: thin; 
+}
+
+.tab-btn { 
+    flex: 0 0 auto; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    background: #1e293b; 
+    border: 1px solid #334155; 
+    color: #94a3b8; 
+    font-weight: 600; 
+    cursor: pointer; 
+    border-radius: 10px; 
+    font-size: 0.8rem; 
+    white-space: nowrap; 
+}
+
+.tab-btn.active { 
+    background: #3b82f6; 
+    color: #fff; 
+    border-color: #60a5fa; 
+}
+
+.tab-btn.bonus-tab { 
+    background: #854d0e; 
+    color: #fef08a; 
+    border-color: #eab308; 
+}
+
+.tab-btn.bonus-tab.active { 
+    background: #eab308; 
+    color: #000; 
+    font-weight: bold; 
+}
+
+/* ==========================================
+   6. VIEWPORT & CARD COMMON COMPONENTS
+   ========================================== */
+.games-viewport { padding: 20px; }
+
+.game-card { 
+    display: none; 
+    flex-direction: column; 
+    gap: 18px; 
+    animation: fadeIn 0.3s ease; 
+}
+
+.game-card.active { display: flex; }
+
+.game-header { display: flex; justify-content: space-between; align-items: center; }
+.level-tag { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; }
+.instruction { color: #cbd5e1; text-align: center; font-size: 0.95rem; }
+
+.message-box { 
+    background: rgba(0,0,0,0.25); 
+    padding: 12px; 
+    border-radius: 10px; 
+    text-align: center; 
+    font-weight: 600; 
+    min-height: 48px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.input-group { display: flex; gap: 8px; }
+.input-group input { 
+    flex: 1; 
+    padding: 12px; 
+    border-radius: 10px; 
+    border: 1px solid #475569; 
+    background: #0f172a; 
+    color: #fff; 
+    font-size: 1.1rem; 
+    text-align: center; 
+    outline: none; 
+}
+
+.input-group button, .btn-start { 
+    padding: 12px 20px; 
+    background: #3b82f6; 
+    border: none; 
+    color: #fff; 
+    font-weight: bold; 
+    border-radius: 10px; 
+    cursor: pointer; 
+}
+
+.btn-start { width: 100%; font-size: 1.05rem; }
+
+.nav-controls { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 10px; 
+    padding-top: 12px; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+}
+
+.btn-nav { padding: 10px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
+.btn-nav.primary { background: #10b981; color: white; }
+.btn-nav.secondary { background: #475569; color: white; }
+.btn-nav.bonus-btn { background: #eab308; color: black; font-weight: bold; }
+.btn-nav:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.proximity-container { height: 10px; background: #334155; border-radius: 5px; overflow: hidden; }
+.proximity-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #3b82f6, #ef4444); transition: width 0.3s; }
+.history-list { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+
+/* ==========================================
+   7. GAME SPECIFIC GRIDS & DISPLAYS
+   ========================================== */
+.memory-display { 
+    height: 110px; 
+    background: #0f172a; 
+    border: 2px dashed #06b6d4; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 2.8rem; 
+    font-weight: bold; 
+    color: #22d3ee; 
+}
+
+.math-problem { 
+    font-size: 2rem; 
+    text-align: center; 
+    font-weight: bold; 
+    background: #0f172a; 
+    padding: 15px; 
+    border-radius: 12px; 
+    color: #fb923c; 
+}
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt-btn { 
+    padding: 14px; 
+    font-size: 1.2rem; 
+    background: #334155; 
+    color: white; 
+    border: none; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.pattern-grid, .matrix-grid, .seq-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pattern-btn, .matrix-btn, .seq-btn { 
+    padding: 15px 5px; 
+    font-size: 1.2rem; 
+    background: #0f172a; 
+    border: 2px solid #10b981; 
+    color: #34d399; 
+    border-radius: 10px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+/* Game 9 Reflex Styling */
+.reflex-card { 
+    background: #020617; 
+    border: 2px solid #06b6d4; 
+    border-radius: 16px; 
+    padding: 10px; 
+    box-shadow: 0 0 15px rgba(6,182,212,0.2); 
+}
+
+.reflex-problem { 
+    font-size: 2.2rem; 
+    color: #38bdf8; 
+    text-shadow: 0 0 10px rgba(56,189,248,0.5); 
+}
+
+.reflex-actions { margin-top: 10px; }
+.reflex-btn { padding: 18px; font-size: 1.3rem; border-radius: 12px; transition: transform 0.1s; }
+.reflex-btn:active { transform: scale(0.96); }
+.true-btn { background: #059669 !important; border: 2px solid #10b981; }
+.false-btn { background: #dc2626 !important; border: 2px solid #ef4444; }
+
+/* Game 10 Wooden Sliding Puzzle Styling */
+.wooden-frame { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 12px; 
+    background: linear-gradient(145deg, #422006, #2e1003); 
+    border: 4px solid #78350f; 
+    border-radius: 16px; 
+    box-shadow: inset 0 0 12px #000, 0 8px 20px rgba(0,0,0,0.5); 
+    margin: 10px auto; 
+    max-width: 340px; 
+}
+
+.wooden-board { 
+    display: grid; 
+    gap: 6px; 
+    width: 300px; 
+    height: 300px; 
+    background: #1c0a02; 
+    padding: 8px; 
+    border-radius: 10px; 
+}
+
+.w-tile { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    background: linear-gradient(145deg, #fef08a, #fde047); 
+    color: #1c0a02; 
+    font-weight: 800; 
+    font-size: 1.2rem; 
+    border-radius: 8px; 
+    border: 1px solid #ca8a04; 
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 6px rgba(0,0,0,0.3); 
+    cursor: pointer; 
+    user-select: none; 
+}
+
+.w-tile.empty { background: transparent; border: none; box-shadow: none; cursor: default; }
+.wooden-btn { background: #d97706 !important; color: #fff !important; }
+
+/* ==========================================
+   8. SUDOKU MASTER & MAGIC SQUARE
+   ========================================== */
+.sudoku-container, .magic-container { display: flex; justify-content: center; margin: 10px 0; }
+
+.sudoku-board { 
+    display: grid; 
+    grid-template-columns: repeat(9, 1fr); 
+    width: 315px; 
+    height: 315px; 
+    background: #0f172a; 
+    border: 3px solid #f43f5e; 
+    border-radius: 8px; 
+    overflow: hidden; 
+}
+
+.s-cell { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: bold; 
+    font-size: 1rem; 
+    border-right: 1px solid #334155; 
+    border-bottom: 1px solid #334155; 
+    cursor: pointer; 
+    background: #1e293b; 
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.s-cell:nth-child(3n) { border-right: 2px solid #f43f5e; }
+.s-cell:nth-child(9n) { border-right: none; }
+.s-cell:nth-child(n+19):nth-child(-n+27), .s-cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid #f43f5e; }
+.s-cell.fixed { background: #0f172a; color: #94a3b8; }
+.s-cell.selected { background: #3b82f6 !important; color: #fff !important; }
+
+/* Sudoku Advanced Cell Highlighting (Row/Col/Box & Same-Number) */
+.s-cell.highlight-peer {
+    background: rgba(56, 189, 248, 0.12) !important;
+}
+
+.s-cell.highlight-same {
+    background: rgba(52, 211, 153, 0.3) !important;
+    color: #34d399 !important;
+    font-weight: 900;
+    box-shadow: inset 0 0 8px rgba(52, 211, 153, 0.5);
+}
+
+.sudoku-pad { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
+.pad-btn { 
+    width: 35px; 
+    height: 35px; 
+    background: #334155; 
+    border: 1px solid #475569; 
+    color: #fff; 
+    font-weight: bold; 
+    border-radius: 6px; 
+    cursor: pointer; 
+}
+
+/* Sudoku Eraser Button Special Highlight Styling */
+.pad-btn.eraser-btn {
+    width: auto;
+    padding: 0 12px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 800;
+    border: 1px solid #f87171;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.pad-btn.eraser-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.8);
+}
+
+.magic-board { 
+    display: grid; 
+    gap: 6px; 
+    background: #0f172a; 
+    padding: 10px; 
+    border-radius: 12px; 
+    border: 2px solid #eab308; 
+}
+
+.m-cell { 
+    width: 45px; 
+    height: 45px; 
+    border-radius: 8px; 
+    border: 1px solid #475569; 
+    background: #1e293b; 
+    color: #fff; 
+    text-align: center; 
+    font-size: 1.1rem; 
+    font-weight: bold; 
+    outline: none; 
+}
+
+/* Sudoku Real-time Correct/Wrong Styles */
+.s-cell.correct-val {
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #34d399 !important;
+    border: 2px solid #10b981 !important;
+}
+
+.s-cell.wrong-val {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #f87171 !important;
+    border: 2px solid #ef4444 !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+/* ==========================================
+   9. DYNAMIC FEEDBACK STYLES (HIGH PRIORITY)
+   ========================================== */
+.opt-btn.correct, .pattern-btn.correct, .s-cell.correct {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #34d399 !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+    transition: all 0.2s ease;
+}
+
+.opt-btn.wrong, .pattern-btn.wrong, .s-cell.wrong {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+    animation: shake 0.3s ease-in-out;
+    transition: all 0.2s ease;
+}
+
+/* ==========================================
+   10. MISC & UTILITY
+   ========================================== */
+#confetti-canvas { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    pointer-events: none; 
+    z-index: 99; 
+}
