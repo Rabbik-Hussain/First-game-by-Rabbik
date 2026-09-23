@@ -368,8 +368,11 @@ function checkSudokuSolution() {
     }
 }
 
-// BONUS GAME: Magic Square
+// ==========================================
+// BONUS GAME: Magic Square (Strict Rule Implementation)
+// ==========================================
 let g6Size = 3;
+
 function generateMagicSquare() {
     const board = document.getElementById('magic-board'); 
     if (!board) return;
@@ -385,27 +388,94 @@ function generateMagicSquare() {
 
     for (let i = 0; i < g6Size * g6Size; i++) {
         const input = document.createElement('input');
-        input.type = 'number'; input.className = 'm-cell';
+        input.type = 'number'; 
+        input.className = 'm-cell';
         board.appendChild(input);
     }
 }
 
 function checkMagicSquare() {
     const inputs = document.querySelectorAll('.m-cell');
-    let vals = Array.from(inputs).map(inp => parseInt(inp.value) || 0);
     const msgElem = document.getElementById('g6-msg');
+    
+    if (inputs.length !== g6Size * g6Size) return;
 
-    let valid = vals.every(v => v > 0);
-    if (valid) {
-        playSound('success'); triggerConfetti(); updateGlobalScore(30);
-        if (g6Size < 9) g6Size++; else g6Size = 3;
-        saveGameState('6', g6Size, totalScore);
-        generateMagicSquare();
-        if (msgElem) msgElem.innerText = 'চমৎকার! পরের সাইজের গ্রিডে উন্নীত হয়েছেন!';
-    } else {
-        playSound('fail'); 
-        if (msgElem) msgElem.innerText = 'সবগুলো ঘর সঠিক সংখ্যা দিয়ে সঠিক যোগফলে মেলাও!';
+    let grid = [];
+    let vals = [];
+    let index = 0;
+    
+    for (let r = 0; r < g6Size; r++) {
+        let row = [];
+        for (let c = 0; c < g6Size; c++) {
+            let val = parseInt(inputs[index].value);
+            if (isNaN(val)) {
+                playSound('fail');
+                if (msgElem) msgElem.innerText = 'সবগুলো ঘর সঠিক সংখ্যা দিয়ে পূরণ করুন!';
+                return;
+            }
+            row.push(val);
+            vals.push(val);
+            index++;
+        }
+        grid.push(row);
     }
+
+    let totalCells = g6Size * g6Size;
+    let uniqueVals = new Set(vals);
+    if (uniqueVals.size !== totalCells) {
+        playSound('fail');
+        if (msgElem) msgElem.innerText = `সবগুলো সংখ্যা আলাদা হতে হবে এবং ১ থেকে ${toBanglaNum(totalCells)} পর্যন্ত সংখ্যা ব্যবহার করতে হবে!`;
+        return;
+    }
+
+    for (let v of vals) {
+        if (v < 1 || v > totalCells) {
+            playSound('fail');
+            if (msgElem) msgElem.innerText = `প্রতিটি সংখ্যা ১ থেকে ${toBanglaNum(totalCells)}-এর মধ্যে হতে হবে!`;
+            return;
+        }
+    }
+
+    let targetSum = (g6Size * (g6Size * g6Size + 1)) / 2;
+    let diag1Sum = 0;
+    let diag2Sum = 0;
+
+    for (let i = 0; i < g6Size; i++) {
+        let rowSum = 0;
+        let colSum = 0;
+        for (let j = 0; j < g6Size; j++) {
+            rowSum += grid[i][j];
+            colSum += grid[j][i];
+        }
+        if (rowSum !== targetSum || colSum !== targetSum) {
+            playSound('fail');
+            if (msgElem) msgElem.innerText = `ভুল হয়েছে! প্রতিটি সারি ও কলামের যোগফল ${toBanglaNum(targetSum)} হতে হবে।`;
+            return;
+        }
+    }
+
+    for (let i = 0; i < g6Size; i++) {
+        diag1Sum += grid[i][i];
+        diag2Sum += grid[i][g6Size - 1 - i];
+    }
+
+    if (diag1Sum !== targetSum || diag2Sum !== targetSum) {
+        playSound('fail');
+        if (msgElem) msgElem.innerText = `ভুল হয়েছে! কর্ণ দুটির (Diagonals) যোগফলও ${toBanglaNum(targetSum)} হতে হবে।`;
+        return;
+    }
+
+    playSound('success'); 
+    triggerConfetti(); 
+    updateGlobalScore(30);
+    
+    if (g6Size < 5) g6Size++; 
+    else g6Size = 3;
+    
+    saveGameState('6', g6Size, totalScore);
+    generateMagicSquare();
+    
+    if (msgElem) msgElem.innerText = 'অসাধারণ! ম্যাজিক স্কয়ার সফলভাবে মিলে গেছে!';
 }
 
 // GAME 6: Missing Operator (Fixed Division Operator Logic)
@@ -420,7 +490,7 @@ function generateOperatorGame() {
     else if (g7Ans === '×') res = n1 * n2;
     else if (g7Ans === '÷') {
         res = n1;
-        n1 = n1 * n2; // নিঃশেষে বিভাজ্য নিশ্চিত করা
+        n1 = n1 * n2;
     }
     
     const lvlElem = document.getElementById('g7-level');
@@ -464,7 +534,7 @@ function generateMatrixGame() {
     let nums = []; 
     for (let i = 0; i < 8; i++) nums.push(Math.floor(Math.random() * 50) + 1);
     const evens = nums.filter(n => n % 2 === 0);
-    if (evens.length === 0) nums[0] = 2; // মিনিমাম একটি জোড় সংখ্যা নিশ্চিত করা
+    if (evens.length === 0) nums[0] = 2;
     g8Target = Math.max(...nums.filter(n => n % 2 === 0));
     
     nums.forEach(n => {
@@ -634,7 +704,6 @@ function isSolvable(arr, size) {
 // ==========================================
 
 window.addEventListener('DOMContentLoaded', () => {
-    // ১. সেভ থাকা গেমের লেভেল লোড করা
     const stateG1 = loadGameState('1');
     if (stateG1.level) g1.level = stateG1.level;
 
@@ -673,7 +742,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const stateG11 = loadGameState('11');
     if (stateG11.level) g11GridSize = stateG11.level;
 
-    // সর্বোচ্চ সেভ থাকা মোট স্কোর রি-স্টোর
     totalScore = Math.max(
         stateG1.score || 0, stateG2.score || 0, stateG3.score || 0,
         stateG4.score || 0, stateG6.score || 0, stateG7.score || 0,
@@ -681,12 +749,10 @@ window.addEventListener('DOMContentLoaded', () => {
     );
     updateGlobalScore(0);
 
-    // ২. অ্যাক্টিভ ট্যাব স্বয়ংক্রিয়ভাবে ওপেন করা
     const lastActiveGame = localStorage.getItem('active_game_id') || 'game_1';
     const gameIndex = parseInt(lastActiveGame.replace('game_', '')) - 1;
     switchGame(isNaN(gameIndex) || gameIndex < 0 ? 0 : gameIndex);
 
-    // ৩. গেমগুলোর ইনিশিয়ালাইজেশন
     initGame1(); 
     generatePatternGame(); 
     generateSudoku(); 
