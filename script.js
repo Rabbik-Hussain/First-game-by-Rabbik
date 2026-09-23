@@ -469,7 +469,8 @@ function checkMagicSquare() {
     triggerConfetti(); 
     updateGlobalScore(30);
     
-    if (g6Size < 5) g6Size++; 
+    // ৩×৩ থেকে শুরু হয়ে ৯×৯ পর্যন্ত যাবে, এরপর আবার ৩×৩ এ ফিরে আসবে
+    if (g6Size < 9) g6Size++; 
     else g6Size = 3;
     
     saveGameState('6', g6Size, totalScore);
